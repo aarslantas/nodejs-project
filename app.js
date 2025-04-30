@@ -3,7 +3,11 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.status(200).send('Hello World');
+  res.status(200).json({
+    message: 'Hello World!',
+    app: 'Express.js',
+    version: '1.0.0',
+  });
 });
 
 app.listen(3000, () => {
