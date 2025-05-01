@@ -26,6 +26,25 @@ app.get('/api/v1/tours', (req, res) => {
   });
 });
 
+app.get('/api/v1/tours/:id', (req, res) => {
+  console.log(req.params);
+  const id = req.params.id * 1; // Convert string to number
+  const tour = tours.find((el) => el.id === id);
+
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Tour not found',
+    });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
+});
+
 app.post('/api/v1/tours', (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
@@ -39,6 +58,34 @@ app.post('/api/v1/tours', (req, res) => {
         status: 'success',
         data: {
           tour: newTour,
+        },
+      });
+    }
+  );
+});
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  const id = req.params.id * 1; // Convert string to number
+  const tour = tours.find((el) => el.id === id);
+
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Tour not found',
+    });
+  }
+
+  // Update the tour object with the new data from the request body
+  Object.assign(tour, req.body);
+
+  fs.writeFile(
+    `${__dirname}/data/tours-simple.json`,
+    JSON.stringify(tours),
+    (err) => {
+      res.status(200).json({
+        status: 'success',
+        data: {
+          tour,
         },
       });
     }
