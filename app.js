@@ -1,12 +1,26 @@
+const fs = require('fs');
 const express = require('express');
 
 const app = express();
 
-app.get('/', (req, res) => {
+// app.get('/', (req, res) => {
+//   res.status(404).json({
+//     message: 'Hello World!',
+//     app: 'Express.js',
+//     version: '1.0.0',
+//   });
+// });
+
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/data/tours-simple.json`, 'utf-8')
+);
+
+app.get('/api/v1/tours', (req, res) => {
   res.status(200).json({
-    message: 'Hello World!',
-    app: 'Express.js',
-    version: '1.0.0',
+    status: 'success',
+    data: {
+      tours,
+    },
   });
 });
 
