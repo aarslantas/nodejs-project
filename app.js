@@ -3,6 +3,8 @@ const express = require('express');
 
 const app = express();
 
+app.use(express.json()); // Middleware to parse JSON data from the request body
+
 // app.get('/', (req, res) => {
 //   res.status(404).json({
 //     message: 'Hello World!',
@@ -20,6 +22,16 @@ app.get('/api/v1/tours', (req, res) => {
     status: 'success',
     data: {
       tours,
+    },
+  });
+});
+
+app.post('/api/v1/tours', (req, res) => {
+  console.log(req.body);
+  res.status(201).json({
+    status: 'success',
+    data: {
+      tour: req.body,
     },
   });
 });
