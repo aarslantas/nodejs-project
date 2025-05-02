@@ -92,6 +92,31 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   );
 });
 
+app.delete('/api/v1/tours/:id', (req, res) => {
+  const id = req.params.id * 1; // Convert string to number
+  const tour = tours.find((el) => el.id === id);
+
+  if (!tour) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Tour not found',
+    });
+  }
+
+  tours.splice(tourIndex, 1); // Remove the tour from the array
+
+  fs.writeFile(
+    `${__dirname}/data/tours-simple.json`,
+    JSON.stringify(tours),
+    (err) => {
+      res.status(204).json({
+        status: 'success',
+        data: null,
+      });
+    }
+  );
+});
+
 app.listen(3000, () => {
   console.log('server is running on port 3000');
 });
