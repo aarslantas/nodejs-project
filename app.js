@@ -5,14 +5,6 @@ const app = express();
 
 app.use(express.json()); // Middleware to parse JSON data from the request body
 
-// app.get('/', (req, res) => {
-//   res.status(404).json({
-//     message: 'Hello World!',
-//     app: 'Express.js',
-//     version: '1.0.0',
-//   });
-// });
-
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/data/tours-simple.json`, 'utf-8')
 );
@@ -65,13 +57,7 @@ const createTour = (req, res) => {
   );
 };
 
-app.get('/api/v1/tours', getAllTours);
-
-app.get('/api/v1/tours/:id', getTour);
-
-app.post('/api/v1/tours', createTour);
-
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
   const id = req.params.id * 1; // Convert string to number
   const tour = tours.find((el) => el.id === id);
 
@@ -97,13 +83,13 @@ app.patch('/api/v1/tours/:id', (req, res) => {
       });
     }
   );
-});
+};
 
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
   const id = req.params.id * 1; // Convert string to number
-  const tour = tours.find((el) => el.id === id);
+  const tourIndex = tours.findIndex((el) => el.id === id);
 
-  if (!tour) {
+  if (tourIndex === -1) {
     return res.status(404).json({
       status: 'fail',
       message: 'Tour not found',
@@ -122,7 +108,21 @@ app.delete('/api/v1/tours/:id', (req, res) => {
       });
     }
   );
-});
+};
+
+// app.get('/api/v1/tours', getAllTours);
+// app.get('/api/v1/tours/:id', getTour);
+// app.post('/api/v1/tours', createTour);
+// app.patch('/api/v1/tours/:id', updateTour);
+// app.delete('/api/v1/tours/:id', deleteTour);
+
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app.listen(3000, () => {
   console.log('server is running on port 3000');
