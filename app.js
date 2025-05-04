@@ -5,6 +5,11 @@ const app = express();
 
 app.use(express.json()); // Middleware to parse JSON data from the request body
 
+app.use((req, res, next) => {
+  console.log('Hello from the middleware 👋');
+  next(); // Call the next middleware in the stack
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/data/tours-simple.json`, 'utf-8')
 );
