@@ -10,13 +10,20 @@ app.use((req, res, next) => {
   next(); // Call the next middleware in the stack
 });
 
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString(); // Add a request time property to the request object
+  next(); // Call the next middleware in the stack
+});
+
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/data/tours-simple.json`, 'utf-8')
 );
 
 const getAllTours = (req, res) => {
+  console.log(req.requestTime); // Log the query parameters to the console
   res.status(200).json({
     status: 'success',
+    requestedAt: req.requestTime,
     results: tours.length,
     data: {
       tours,
