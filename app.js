@@ -148,20 +148,18 @@ const getAllUser = (req, res) => {
 // app.delete('/api/v1/tours/:id', deleteTour);
 
 // 3) ROUTES
-app
-  .route('/api/v1/tours/:id')
-  .get(getTour)
-  .patch(updateTour)
-  .delete(deleteTour);
 
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
+const tourRouter = express.Router();
+const userRouter = express.Router();
 
-app.route('/api/v1/users').get(getAllUser).post(createUser);
-app
-  .route('/api/v1/users/:id')
-  .get(getUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+tourRouter.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);
+tourRouter.route('/').get(getAllTours).post(createTour);
+
+userRouter.route('/').get(getAllUser).post(createUser);
+userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/users', userRouter);
 
 app.listen(3000, () => {
   console.log('server is running on port 3000');
