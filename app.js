@@ -22,6 +22,10 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/data/tours-simple.json`, 'utf-8')
 );
 
+const users = JSON.parse(
+  fs.readFileSync(`${__dirname}/data/users-simple.json`, 'utf-8')
+);
+
 // 2) ROUTE HANDLERS
 const getAllTours = (req, res) => {
   console.log(req.requestTime); // Log the query parameters to the console
@@ -126,6 +130,17 @@ const deleteTour = (req, res) => {
   );
 };
 
+const getAllUser = (req, res) => {
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: tours.length,
+    data: {
+      tours,
+    },
+  });
+};
+
 // app.get('/api/v1/tours', getAllTours);
 // app.get('/api/v1/tours/:id', getTour);
 // app.post('/api/v1/tours', createTour);
@@ -142,6 +157,11 @@ app
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
 
 app.route('/api/v1/users').get(getAllUser).post(createUser);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
 
 app.listen(3000, () => {
   console.log('server is running on port 3000');
