@@ -10,7 +10,7 @@ const app = express();
 // 1) MIDDLEWARES
 app.use(morgan('dev')); // Logging middleware for development
 app.use(express.json()); // Middleware to parse JSON data from the request body
-
+app.use(express.static(`${__dirname}/public`)); // Serve static files from the public directory
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
   next(); // Call the next middleware in the stack
@@ -22,12 +22,6 @@ app.use((req, res, next) => {
 });
 
 // 2) ROUTE HANDLERS
-
-// app.get('/api/v1/tours', getAllTours);
-// app.get('/api/v1/tours/:id', getTour);
-// app.post('/api/v1/tours', createTour);
-// app.patch('/api/v1/tours/:id', updateTour);
-// app.delete('/api/v1/tours/:id', deleteTour);
 
 // 3) ROUTES
 

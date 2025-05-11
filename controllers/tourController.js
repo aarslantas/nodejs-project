@@ -4,6 +4,29 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../data/tours-simple.json`, 'utf-8')
 );
 
+
+exports.checkID = (req, res, next, val) => {
+  console.log(`Tour id is: ${val}`); // Log the tour ID to the console
+  if (req.params.id * 1 > tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID',
+    });
+  }
+  next(); // Call the next middleware in the stack
+}
+
+
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'Missing name or price',
+    });
+  }
+  next(); // Call the next middleware in the stack
+};
+
 exports.getAllTours = (req, res) => {
   console.log(req.requestTime); // Log the query parameters to the console
   res.status(200).json({
@@ -21,12 +44,6 @@ exports.getTour = (req, res) => {
   const id = req.params.id * 1; // Convert string to number
   const tour = tours.find((el) => el.id === id);
 
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Tour not found',
-    });
-  }
   res.status(200).json({
     status: 'success',
     data: {
@@ -58,12 +75,6 @@ exports.updateTour = (req, res) => {
   const id = req.params.id * 1; // Convert string to number
   const tour = tours.find((el) => el.id === id);
 
-  if (!tour) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Tour not found',
-    });
-  }
 
   // Update the tour object with the new data from the request body
   Object.assign(tour, req.body);
@@ -86,12 +97,6 @@ exports.deleteTour = (req, res) => {
   const id = req.params.id * 1; // Convert string to number
   const tourIndex = tours.findIndex((el) => el.id === id);
 
-  if (tourIndex === -1) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Tour not found',
-    });
-  }
 
   tours.splice(tourIndex, 1); // Remove the tour from the array
 
