@@ -8,7 +8,12 @@ const userRouter = require('./routes/userRoutes'); // Importing the user routes
 const app = express();
 
 // 1) MIDDLEWARES
-app.use(morgan('dev')); // Logging middleware for development
+
+console.log(process.env.NODE_ENV); // Log the current environment (development or production)
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev')); // Use morgan for logging in development mode
+}
+
 app.use(express.json()); // Middleware to parse JSON data from the request body
 app.use(express.static(`${__dirname}/public`)); // Serve static files from the public directory
 app.use((req, res, next) => {
