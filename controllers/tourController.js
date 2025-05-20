@@ -15,30 +15,43 @@ const Tour = require('../models/tourModel'); // Import the Tour model
 //   next(); // Call the next middleware in the stack
 // };
 
-// exports.getAllTours = (req, res) => {
-//   console.log(req.requestTime); // Log the query parameters to the console
-//   res.status(200).json({
-//     status: 'success',
-//     requestedAt: req.requestTime,
-//     results: tours.length,
-//     data: {
-//       tours,
-//     },
-//   });
-// };
+exports.getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find(); // Fetch all tours from the database
+    res.status(200).json({
+      status: 'success',
+      results: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (err) {
+    return res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
 
-// exports.getTour = (req, res) => {
-//   console.log(req.params);
-//   const id = req.params.id * 1; // Convert string to number
-//   const tour = tours.find((el) => el.id === id);
+exports.getTour = async (req, res) => {
+  try {
+    console.log(`Tour id is: ${req.params.id}`); // Log the tour ID to the console
+    // Convert string to number
+    const tour = await Tour.findById(req.params.id); // Find the tour by ID
 
-//   res.status(200).json({
-//     status: 'success',
-//     data: {
-//       tour,
-//     },
-//   });
-// };
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Tour not found',
+    });
+  }
+};
 
 exports.createTour = async (req, res) => {
   try {
@@ -58,26 +71,26 @@ exports.createTour = async (req, res) => {
   }
 };
 
-// exports.updateTour = (req, res) => {
-//   const id = req.params.id * 1; // Convert string to number
-//   const tour = tours.find((el) => el.id === id);
+exports.updateTour = async (req, res) => {
+  try {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-//   // Update the tour object with the new data from the request body
-//   Object.assign(tour, req.body);
-
-//   fs.writeFile(
-//     `${__dirname}/data/tours-simple.json`,
-//     JSON.stringify(tours),
-//     (err) => {
-//       res.status(200).json({
-//         status: 'success',
-//         data: {
-//           tour,
-//         },
-//       });
-//     },
-//   );
-// };
+    res.status(200).json({
+      status: 'success',
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    return res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
 
 // exports.deleteTour = (req, res) => {
 //   const id = req.params.id * 1; // Convert string to number

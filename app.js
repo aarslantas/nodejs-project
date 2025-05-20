@@ -1,4 +1,3 @@
-const fs = require('fs');
 const express = require('express');
 const morgan = require('morgan');
 
@@ -15,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json()); // Middleware to parse JSON data from the request body
-app.use(express.static(`${__dirname}/public`)); // Serve static files from the public directory
+// app.use(express.static(`${__dirname}/public`)); // Serve static files from the public directory
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString(); // Add a request time property to the request object
