@@ -35,7 +35,6 @@ exports.getAllTours = async (req, res) => {
 
 exports.getTour = async (req, res) => {
   try {
-    console.log(`Tour id is: ${req.params.id}`); // Log the tour ID to the console
     // Convert string to number
     const tour = await Tour.findById(req.params.id); // Find the tour by ID
 
@@ -92,20 +91,18 @@ exports.updateTour = async (req, res) => {
   }
 };
 
-// exports.deleteTour = (req, res) => {
-//   const id = req.params.id * 1; // Convert string to number
-//   const tourIndex = tours.findIndex((el) => el.id === id);
+exports.deleteTour = async (req, res) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id); // Delete the tour by ID
 
-//   tours.splice(tourIndex, 1); // Remove the tour from the array
-
-//   fs.writeFile(
-//     `${__dirname}/data/tours-simple.json`,
-//     JSON.stringify(tours),
-//     (err) => {
-//       res.status(204).json({
-//         status: 'success',
-//         data: null,
-//       });
-//     },
-//   );
-// };
+    res.status(204).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
