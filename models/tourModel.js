@@ -14,6 +14,15 @@ const tourSchema = new mongoose.Schema({
     type: Number,
     default: 4.5,
   },
+  duration: {
+    type: Number,
+    required: [true, 'A tour must have a duration'],
+  },
+  difficulty: {
+    type: String,
+    required: [true, 'A tour must have a difficulty'],
+    enum: ['easy', 'medium', 'difficult'],
+  },
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
