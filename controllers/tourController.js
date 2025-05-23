@@ -16,8 +16,14 @@ const Tour = require('../models/tourModel'); // Import the Tour model
 // };
 
 exports.getAllTours = async (req, res) => {
+  const queryObj = Object.assign({}, req.query); // Create a copy of the query object
+  const excludedFields = ['page', 'sort', 'limit', 'fields']; // Fields to exclude from the query
+  excludedFields.forEach((el) => delete queryObj[el]); // Remove excluded fields from the query object
+
+  const query = Tour.find(queryObj); // Create a query using the Tour model
+
   try {
-    const tours = await Tour.find(); // Fetch all tours from the database
+    const tours = await query; // Fetch all tours from the database
     res.status(200).json({
       status: 'success',
       results: tours.length,
