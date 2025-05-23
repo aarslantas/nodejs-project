@@ -20,7 +20,10 @@ exports.getAllTours = async (req, res) => {
   const excludedFields = ['page', 'sort', 'limit', 'fields']; // Fields to exclude from the query
   excludedFields.forEach((el) => delete queryObj[el]); // Remove excluded fields from the query object
 
-  const query = Tour.find(queryObj); // Create a query using the Tour model
+  // 2) ADVANCED FILTERING
+  let queryStr = JSON.stringify(queryObj);
+  queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); // Replace comparison operators with MongoDB syntax
+  const query = Tour.find(queryStr); // Create a query using the Tour model
 
   try {
     const tours = await query; // Fetch all tours from the database
