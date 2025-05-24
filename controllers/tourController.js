@@ -23,7 +23,14 @@ exports.getAllTours = async (req, res) => {
   // 2) ADVANCED FILTERING
   let queryStr = JSON.stringify(queryObj);
   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`); // Replace comparison operators with MongoDB syntax
-  const query = Tour.find(queryStr); // Create a query using the Tour model
+  let query = Tour.find(queryStr); // Create a query using the Tour model
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' '); // Sort by specified fields
+    query = query.sort(sortBy);
+  } else {
+    query = query.sort('-createdAt'); // Default sort by createdAt in descending order
+  }
 
   try {
     const tours = await query; // Fetch all tours from the database
