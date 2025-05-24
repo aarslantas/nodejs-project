@@ -32,6 +32,13 @@ exports.getAllTours = async (req, res) => {
     query = query.sort('-createdAt'); // Default sort by createdAt in descending order
   }
 
+  if (req.query.fields) {
+    const fields = req.query.fields.split(',').join(' '); // Select specified fields
+    query = query.select(fields);
+  } else {
+    query = query.select('-__v'); // Exclude the __v field by default
+  }
+
   try {
     const tours = await query; // Fetch all tours from the database
     res.status(200).json({
