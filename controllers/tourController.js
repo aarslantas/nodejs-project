@@ -1,4 +1,5 @@
-const Tour = require('../models/tourModel'); // Import the Tour model
+const Tour = require('../models/tourModel');
+const APIFeatures = require('../utils/apiFeatures');
 
 // const tours = JSON.parse(
 //   fs.readFileSync(`${__dirname}/../data/tours-simple.json`, 'utf-8'),
