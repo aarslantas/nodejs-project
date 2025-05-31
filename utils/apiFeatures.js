@@ -6,7 +6,7 @@ class APIFeatures {
 
   filter() {
     // 1) FILTERING
-    const queryObj = { ...this.queryString }; // Create a copy of the query string
+    const queryObj = Object.assign({}, this.queryString); // Create a copy of the query string
     const excludedFields = ['page', 'sort', 'limit', 'fields']; // Fields to exclude from filtering
     excludedFields.forEach((el) => delete queryObj[el]); // Remove excluded fields from the query object
 
