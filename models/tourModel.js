@@ -98,6 +98,11 @@ tourSchema.post(/^find/, function (docs, next) {
   next();
 });
 
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } }); // Exclude secret tours from aggregation
+  next();
+});
+
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour; // Export the Tour model for use in other files
